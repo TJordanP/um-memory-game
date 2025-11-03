@@ -12,11 +12,46 @@ interface MemoryGameBlueprint{
 }
 
 
-interface MemoryGameCard{
+interface MemoryGameCardStruct{
     blueprint: MemoryGameBlueprintCard;
     visible: boolean;
     position: [number,number];
 }
+
+class MemoryGameCard{
+    protected value: MemoryGameCardStruct;
+
+    constructor(value:MemoryGameCardStruct){
+        this.value = value;
+    }
+
+    get blueprint(){
+        return this.value.blueprint;
+    }
+    get visible(){
+        return this.value.visible;
+    }
+    get position(){
+        return this.value.position;
+    }
+}
+
+class MemoryGameCardP extends MemoryGameCard{
+    constructor(value:MemoryGameCardStruct){
+        super(value);
+    }
+
+    set blueprint(val:typeof this.value.blueprint){
+        this.value.blueprint = val;
+    }
+    set visible(val:typeof this.value.visible){
+        this.value.visible = val;
+    }
+    set position(val:typeof this.value.position){
+        this.value.position = val;
+    }
+}
+
 
 interface MemoryGameEvents{
     closeCard?: (x:number,y:number) => Promise<void>;
@@ -26,7 +61,7 @@ interface MemoryGameEvents{
 
 class MemoryGame{
     private blueprint: MemoryGameBlueprint;
-    private board: Record<string,MemoryGameCard>;
+    private board: Record<string,MemoryGameCardP>;
     private errorsCount: number;
     private events: MemoryGameEvents;
 
@@ -52,11 +87,11 @@ class MemoryGame{
                 Math.floor(Math.random() * this.getGridOrder())
             ]);
 
-            if (!this.board[newPositionKey])   this.board[newPositionKey] = {
+            if (!this.board[newPositionKey])   this.board[newPositionKey] = new MemoryGameCardP({
                 blueprint: cardBlueprint,
                 visible: false,
                 position: MemoryGame.keyToPostion(newPositionKey)
-            };
+            });
             else    --i;        //Repeat initial position selection !!
         }
     }
@@ -72,6 +107,10 @@ class MemoryGame{
 
     getCardsPositions(){
         return Object.keys(this.board);
+    }
+
+    getCards(){
+        return Object.values(this.board) as MemoryGameCard[];
     }
 
     //Changing Getters
@@ -164,4 +203,4 @@ class MemoryGame{
     }
 }
 
-export { MemoryGame , type MemoryGameBlueprint, };
+export { MemoryGame , type MemoryGameBlueprint, MemoryGameCard };

@@ -68,5 +68,82 @@ describe('MemoryGame Init State Tests',() => {
 
 });
 
+describe('MemoryGame State Mutation Tests',() => {
+    const initGame = new MemoryGame({cards: [
+        {count:2,consecutiveErrorsAllowed:0},
+        {count:2,consecutiveErrorsAllowed:0},
+        {count:2,consecutiveErrorsAllowed:0},
+        {count:2,consecutiveErrorsAllowed:0},
+    ],penalizeOnNullCards: false});
 
+    it('Should always open a card after init',async () => {
+        const game = initGame;
+
+        const pos1 = MemoryGame.keyToPostion(game.getCardsPositions()[0])
+
+        await game.openCard(...pos1);
+
+        assert.strictEqual(
+            game.isOpenedCard(...pos1) , 
+            true,
+            'Should open first card'
+        );
+    });
+
+    it('Should always close an opened card upon a #openCard call',async () => {
+        const game = initGame;
+
+        const pos1 = MemoryGame.keyToPostion(game.getCardsPositions()[0])
+
+        await game.openCard(...pos1);
+        await game.openCard(...pos1);
+
+        assert.strictEqual(
+            game.isOpenedCard(...pos1) , 
+            false,
+            'Should close first card'
+        );
+    });
+
+
+    it('Should always close an opened card upon a #openCard call',async () => {
+        const game = initGame;
+
+        const pos1 = MemoryGame.keyToPostion(game.getCardsPositions()[0])
+
+        await game.openCard(...pos1);
+        await game.openCard(...pos1);
+
+        assert.strictEqual(
+            game.isOpenedCard(...pos1) , 
+            false,
+            'Should close first card'
+        );
+
+        assert.strictEqual(
+            game.getBlueprintOfOpenedCards(),
+            null,
+            'At this point, the grid should be closed'
+        );
+    });
+
+    it('Should always close the grid when a wrong card was opened',async () => {
+        const game = initGame;
+
+        const pos1 = MemoryGame.keyToPostion(game.getCardsPositions()[0]);
+
+        await game.openCard(...pos1);
+        
+    });
+
+/*
+won cards should not be closed,
+or what if the could be depending on some level blueprint like
+onError do nothing , or close everything or just close failed card, or
+close failed + 1,2,3 or more completed cards, ???
+*/
+
+
+
+});
 
