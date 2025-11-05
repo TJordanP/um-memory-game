@@ -1,4 +1,4 @@
-import { useContext, type JSX } from "react";
+import { useContext, type JSX, type MouseEventHandler } from "react";
 import GameModelContext from "../contexts/GameModelContext";
 
 import { type MemoryGameCard, MemoryGame } from '../models/MemoryGame';
@@ -7,18 +7,19 @@ import { type MemoryGameCard, MemoryGame } from '../models/MemoryGame';
 interface CardParams{
   style?: React.CSSProperties;
   children: JSX.Element;
-  id: string;
   card: MemoryGameCard;
+  className?: string;
+  onClick?: MouseEventHandler;
 };
 
-function Card({children,style,id,card} : CardParams){
+function Card({children,style,card,className,onClick} : CardParams){
   const [ col , row ]= card.position;
   const defaultStyle: React.CSSProperties = {
     gridColumn: col+1,
     gridRow: row+1,
   };
   return (
-    <button tabIndex={row*3 + col} style={Object.assign(defaultStyle,style)} id={id}>
+    <button tabIndex={row*3 + col} className={className || ''} style={Object.assign(defaultStyle,style)} key={card.toId()} onClick={onClick}>
       {children}
     </button>
   );

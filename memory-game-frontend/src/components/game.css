@@ -1,0 +1,5 @@
+
+.game-card:focus{
+    border: none;
+    outline: none;
+}
