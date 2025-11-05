@@ -3,3 +3,7 @@
     border: none;
     outline: none;
 }
+
+.game-card:disabled{
+    /*opacity: 0.5;*/
+}

@@ -15,7 +15,7 @@ function Board({children,style}:BoardParams){
     gap: '0px',
 };
   return (
-    <div style={Object.assign(defaultStyle,style)}>
+    <div style={{...defaultStyle,...style}}>
       {children}
     </div>
   );

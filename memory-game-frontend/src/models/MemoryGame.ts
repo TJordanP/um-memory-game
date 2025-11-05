@@ -144,6 +144,10 @@ class MemoryGame{
         return positions;
     }
 
+    findCard(x:number,y:number): MemoryGameCard{
+        return this.board[MemoryGame.positionToKey([x,y])];
+    }
+
     //Changing Getters
     getBlueprintOfOpenedCards(): MemoryGameBlueprintCard | null{
         return Object.values(this.board)
@@ -183,6 +187,8 @@ class MemoryGame{
     //Mutators
     private async closeAllCards(){
         Object.entries(this.board).forEach(async ([index,card]) => {
+            if (card.visible === false)     return ;
+
             card.visible = false;
             //emit
             const [x,y] = MemoryGame.keyToPostion(index);
@@ -198,7 +204,9 @@ class MemoryGame{
 
         Object.entries(this.board).forEach(async ([index,card]) => {
             if (completedCardsBlueprints.includes(card.blueprint))      return ;
-
+            
+            if (card.visible === false)     return ;
+            
             card.visible = false;
             //emit
             const [x,y] = MemoryGame.keyToPostion(index);

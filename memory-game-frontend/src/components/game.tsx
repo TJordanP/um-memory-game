@@ -1,9 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MemoryGame, type MemoryGameBlueprint } from '../models/MemoryGame';
 
 import GameModelContext from '../contexts/GameModelContext';
 import Board from '../components/board';
 import Card from '../components/card';
+
+import { delay } from '../utils';
 
 import './game.css';
 
@@ -19,7 +21,62 @@ interface GameParams{
 function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,nullCardCSSBackground}:GameParams){
   const gameModel = useMemo(() => new MemoryGame(blueprint),[blueprint]);
 
-  const [ val , update ] = useState(false);
+  const cardElements = Array.from(
+    { length: gameModel.getTotalCardsCount() },
+    () => useRef<HTMLButtonElement | null>(null)
+  );
+
+  const [ _ , update ] = useState(false);
+
+  const refreshGUI = useCallback(async () => {
+    update(val => !val);
+    await delay(0);
+  },[]);
+
+  const [ allCardsDisabled, setAllCardsDisabled ] = useState(false);
+
+  const playCardAnimation = async (x:number,y:number) => {
+        const card = gameModel.findCard(x,y);
+
+        const blueprintIndex = blueprint.cards.indexOf(card.blueprint);
+        const background = card.visible ? cardCSSBackgrounds[blueprintIndex] : hiddenCardCSSBackground;
+
+        const indexInGetCards = gameModel.getCards().findIndex(cardI => card === cardI);
+        const element = cardElements[indexInGetCards].current;
+
+        if (!element)   return ;
+
+        
+        console.log(element.style.background);
+
+        await element.animate([
+            { transform: 'scaleX(1)' },          // Starting state
+            { transform: 'scaleX(0)' },      // Halfway state
+        ], {
+            duration: 500,      // Duration of the animation in milliseconds
+            easing: 'ease-in-out' // Easing function for smooth animation
+        }).finished;
+
+        //console.log(element?.style.background);
+
+        element.style.background = background;
+
+        await element.animate([
+            { transform: 'scaleX(0)' },          // Starting state
+            { transform: 'scaleX(1)' },      // Halfway state
+        ], {
+            duration: 500,      // Duration of the animation in milliseconds
+            easing: 'ease-in-out' // Easing function for smooth animation
+        }).finished;
+    };
+
+  useEffect(() => {
+    gameModel.setEventListeners({
+        openCard: playCardAnimation,
+        closeCard: playCardAnimation,
+
+    });
+  },[gameModel]);
 
   const boardStyles:React.CSSProperties = {
     width: '400px',
@@ -35,6 +92,11 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,nullCardCSSB
     borderStyle: 'none',
   };
 
+  /*
+    highlight winning cards !!
+  */
+
+
   return (
     <GameModelContext.Provider value={gameModel}>
       <Board style={boardStyles}>
@@ -45,19 +107,24 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,nullCardCSSB
 
             return (
                 <Card 
+                    key={i}
                     card={card} 
-                    style={{...cardStyles,background}}
+                    style={{...cardStyles,background,cursor: allCardsDisabled ? 'not-allowed': 'pointer'}}
                     className='game-card'
                     onClick={async e => {
+                        //setAllCardsDisabled(true);
+
                         await gameModel.openCard(...card.position);
-                        update(!val);
-                        
-                        setTimeout(() => {
-                            if (gameModel.hasWonGame()){
-                                alert('BINGO');
-                            }
-                        },0);
+                        //await refreshGUI();
+
+                        if (gameModel.hasWonGame()){
+                            alert('BINGO');
+                        }
+
+                        //setAllCardsDisabled(false);
                     }}
+                    ref={cardElements[i]}
+                    disabled={allCardsDisabled}
                 >
                     <></>
                 </Card>
