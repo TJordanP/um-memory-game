@@ -1,5 +1,5 @@
 import { useContext, type JSX } from "react";
-import GameModelContext from "../contexts/GameModelContext";
+import GameModelContext from "../context/GameModelContext";
 
 interface BoardParams{
   style?: React.CSSProperties;

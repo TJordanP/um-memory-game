@@ -1,5 +1,5 @@
 import { useContext, type JSX, type MouseEventHandler } from "react";
-import GameModelContext from "../contexts/GameModelContext";
+import GameModelContext from "../context/GameModelContext";
 
 import { type MemoryGameCard, MemoryGame } from '../models/MemoryGame';
 

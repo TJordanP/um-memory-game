@@ -1,0 +1,19 @@
+.menu-button{
+    outline: 0;
+}
+
+.menu-button:hover{
+    color: blue;
+    outline: 0;
+}
+
+.menu-button:active{
+    outline: 0;
+    /*color: cornflowerblue;*/
+    transform: scale(1.05);
+    opacity: 1;
+}
+
+.menu-button:focus{
+    outline: 0;
+}

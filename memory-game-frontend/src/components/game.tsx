@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MemoryGame, type MemoryGameBlueprint } from '../models/MemoryGame';
 
-import GameModelContext from '../contexts/GameModelContext';
+import GameModelContext from '../context/GameModelContext';
 import Board from '../components/board';
 import Card from '../components/card';
 
@@ -113,11 +113,13 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,nullCardCSSB
 
   return (
     <GameModelContext.Provider value={gameModel}>
+      
       <div style={{textAlign: 'center',marginBottom: '1rem',userSelect: 'none',fontSize: '2rem'}}>
         {actionsCount <= 9 && <Odometer value={0} format="ddd" />}
         {actionsCount <= 99 && <Odometer value={0} format="ddd" />}
         <Odometer value={actionsCount} format="ddd" />
       </div>
+
       <Board style={boardStyles}>
         {
           gameModel.getCards().map((card,i) => {
