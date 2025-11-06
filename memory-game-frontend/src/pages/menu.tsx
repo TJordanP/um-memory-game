@@ -3,6 +3,7 @@ import type React from "react";
 import './menu.css';
 import './menu-animated-background.css';
 import Marquee from "react-fast-marquee";
+import { useNavigate } from "react-router-dom";
 
 function AnimatedBackground({style}:{style?:React.CSSProperties}){
     return (
@@ -66,6 +67,8 @@ function Menu(){
         height: '100%',
     };
 
+    const nav = useNavigate();
+
     return (
         <div style={{position: 'relative',top: 0,left: 0,width: '100%',height: '100%',overflow: 'hidden'}}>
             <AnimatedBackground style={stackStyles}/>
@@ -73,8 +76,16 @@ function Menu(){
                 <div style={{fontFamily:'cursive',fontSize: '4rem'}}>GEMÖ</div>
                 <div style={layoutStyles}>
                     {
-                        ['PLAY','AI SIMULATION','OPTIONS','ABOUT']
-                        .map((label,i) => <button key={i} className='menu-button' style={buttonStyles}>{label}</button>)
+                        [['PLAY','/game'],['AI SIMULATION'],['OPTIONS'],['ABOUT']]
+                        .map(
+                            ([label,route],i) => 
+                                <button key={i} className='menu-button' style={buttonStyles} onClick={e => {
+                                    if (!route)     return ;
+                                    nav(route);
+                                }}>
+                                    {label}
+                                </button>
+                        )
                     }
                 </div>
                 <Marquee style={{fontFamily: 'sans-serif'}} pauseOnClick={true}>Written by Tchinda Jordan, Nov 2025</Marquee>
