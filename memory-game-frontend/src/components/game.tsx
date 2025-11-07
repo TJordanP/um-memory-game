@@ -94,6 +94,14 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,nullCardCSSB
     borderRadius: '20px',
     padding: '1rem',
     gap: '1rem',
+
+    /*Glass Effects */
+    /* From https://css.glass */
+    background: 'rgba(255, 255, 255, 0.13)',
+    /*borderRadius: '16px',*/
+    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+    backdropFilter: 'blur(5.3px)',
+    '-webkit-backdrop-filter': 'blur(5.3px)',
   };
 
   const cardStyles: React.CSSProperties = {
