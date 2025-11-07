@@ -42,9 +42,9 @@ function Menu(){
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        rowGap: '3rem'
-
+        rowGap: '3rem',
     };
+
     const layoutStyles:React.CSSProperties = {
         height: '70%',
         width: '95%',
@@ -52,7 +52,7 @@ function Menu(){
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        rowGap: '2rem'
+        rowGap: '2rem',
     };
 
     const buttonStyles:React.CSSProperties = {
