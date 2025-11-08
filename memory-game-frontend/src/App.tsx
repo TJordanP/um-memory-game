@@ -9,7 +9,6 @@ import {
   Route,
   Routes,
   Navigate,
-  useNavigate,
 } from "react-router-dom";
 import { useState } from 'react';
 import AppModelContext from './context/AppModelContext';
@@ -31,13 +30,15 @@ const colors = [
 
 interface AppModel{
   audioEnabled: boolean;
+  aiMode: boolean;
 };
 
 
 
 function App() {
-  const [ state , setState ] = useState<AppModel | undefined>({
+  const [ state , setState ] = useState<AppModel>({
     audioEnabled: false,
+    aiMode: false,
   });
 
   return (

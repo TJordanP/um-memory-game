@@ -33,6 +33,8 @@ import { useModalState } from "../utils";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import OptionsModal from "../components/options-modal";
+import { useContext } from "react";
+import AppModelContext from "../context/AppModelContext";
 
 function Menu(){
     const rootLayoutStyles:React.CSSProperties = {
@@ -74,9 +76,11 @@ function Menu(){
         height: '100%',
     };
 
-    const nav = useNavigate();
+    const navigate = useNavigate();
 
     const optionsModalState = useModalState(false);
+
+    const appModel = useContext(AppModelContext);
 
     return (
         <div style={{position: 'relative',top: 0,left: 0,width: '100%',height: '100%',overflow: 'hidden'}}>
@@ -88,10 +92,16 @@ function Menu(){
                         [['PLAY','/game'],['AI SIMULATION','/game'],['OPTIONS'],['ABOUT']]
                         .map(
                             ([label,route],i) => 
-                                <button key={i} className='menu-button' style={buttonStyles} onClick={e => {
+                                <button key={i} className='menu-button' style={buttonStyles} onClick={_ => {
+                                    appModel?.setState(state => ({
+                                        ...state,
+                                        aiMode: (label === 'AI SIMULATION')
+                                    }));
+
                                     if (label === 'OPTIONS')    optionsModalState.setShow(true);
                                     if (!route)     return ;
-                                    nav(route);
+                                    
+                                    navigate(route);
                                 }}>
                                     {label}
                                 </button>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { MemoryGame, type MemoryGameBlueprint } from '../models/MemoryGame';
 
 import GameModelContext from '../context/GameModelContext';
@@ -8,12 +8,14 @@ import Card from '../components/card';
 /*import { CountUp } from "https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.6.0/countUp.min.js";
 import { Odometer } from "./odometer.min.js";*/
 
-import { delay } from '../utils';
+import { delay, useOnMountUnsafe } from '../utils';
 
 import Odometer from 'react-odometerjs';
 import './odometer-theme-slot-machine.css';
 
 import './game.css';
+import AppModelContext from '../context/AppModelContext';
+import { play } from '../models/AIPlayScript';
 
 interface GameParams{
   /*style?: React.CSSProperties;*/
@@ -24,7 +26,7 @@ interface GameParams{
   nullCardCSSBackground: string;
 };
 
-function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,nullCardCSSBackground}:GameParams){
+function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds}:GameParams){
   const gameModel = useMemo(() => new MemoryGame(blueprint),[blueprint]);
 
   const cardElements = Array.from(
@@ -86,6 +88,15 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,nullCardCSSB
     });
   },[gameModel]);
 
+
+  const appModel = useContext(AppModelContext);
+
+  useOnMountUnsafe(() => {
+    if (appModel?.state.aiMode){
+      play(gameModel,0.5);
+    }
+  });
+
   const boardStyles:React.CSSProperties = {
     width: '400px',
     height: '400px',
@@ -101,6 +112,7 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,nullCardCSSB
     /*borderRadius: '16px',*/
     boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
     backdropFilter: 'blur(5.3px)',
+    //@ts-ignore
     '-webkit-backdrop-filter': 'blur(5.3px)',
   };
 
@@ -157,7 +169,7 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,nullCardCSSB
                             easing: 'ease-in-out' // Easing function for smooth animation
                         }).finished;
                       }
-                      : async e => {
+                      : async _ => {
                         setAllCardsDisabled(true);
                         if (!gameModel.isWinningCard(card.blueprint)){
                           setActionsCount(actions => actions + 1);

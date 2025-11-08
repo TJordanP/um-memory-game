@@ -1,5 +1,5 @@
 
-interface MemoryGameBlueprintCard{
+interface MemoryGameCardBlueprint{
     count: number;
     consecutiveErrorsAllowed: number;
     penalizeType: 'all' | 'current';
@@ -9,13 +9,13 @@ interface MemoryGameBlueprintCard{
 }
 
 interface MemoryGameBlueprint{
-    cards: MemoryGameBlueprintCard[];
+    cards: MemoryGameCardBlueprint[];
     penalizeOnNullCards: boolean;   //could be a count like consecutiveErrorsAllowed
 }
 
 
 interface MemoryGameCardStruct{
-    blueprint: MemoryGameBlueprintCard;
+    blueprint: MemoryGameCardBlueprint;
     visible: boolean;
     position: [number,number];
 }
@@ -72,7 +72,7 @@ class MemoryGameCardP extends MemoryGameCard{
 interface MemoryGameEvents{
     closeCard?: ((x:number,y:number) => Promise<void>) | null;
     openCard?: ((x:number,y:number) => Promise<void>) | null;
-    penalized?: ((cardBlueprint: MemoryGameBlueprintCard) => Promise<void>) | null;
+    penalized?: ((cardBlueprint: MemoryGameCardBlueprint) => Promise<void>) | null;
 }
 
 class MemoryGame{
@@ -149,7 +149,7 @@ class MemoryGame{
     }
 
     //Changing Getters
-    getBlueprintOfOpenedCards(): MemoryGameBlueprintCard | null{
+    getBlueprintOfOpenedCards(): MemoryGameCardBlueprint | null{
         return Object.values(this.board)
         .filter(card => !this.isWinningCard(card.blueprint))
         .find(card => card.visible)?.blueprint || null;
@@ -163,12 +163,12 @@ class MemoryGame{
         return this.board[index]?.visible || false;
     }
 
-    getCountOfOpenedCards(cardBlueprint: MemoryGameBlueprintCard){
+    getCountOfOpenedCards(cardBlueprint: MemoryGameCardBlueprint){
         return this.getCards()
         .filter(card => card.blueprint === cardBlueprint && card.visible === true).length;
     }
 
-    isWinningCard(cardBlueprint: MemoryGameBlueprintCard){
+    isWinningCard(cardBlueprint: MemoryGameCardBlueprint){
         return this.getCountOfOpenedCards(cardBlueprint) === cardBlueprint.count;
     }
 
@@ -286,4 +286,4 @@ class MemoryGame{
     }
 }
 
-export { MemoryGame , type MemoryGameBlueprint, MemoryGameCard };
+export { MemoryGame , type MemoryGameBlueprint, MemoryGameCard, type MemoryGameCardBlueprint };

@@ -1,10 +1,10 @@
-import { createContext, useState } from 'react';
+import { createContext } from 'react';
 import type { AppModel } from '../App';
 
 
 interface AppModelContext{
-    state: ReturnType<typeof useState<AppModel>>[0];
-    setState: ReturnType<typeof useState<AppModel>>[1];
+    state: AppModel;
+    setState: React.Dispatch<React.SetStateAction<AppModel>>;
 };
 
 const AppModelContext = createContext<AppModelContext | null>(null);
