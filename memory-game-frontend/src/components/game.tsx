@@ -93,7 +93,7 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds}:GameParams)
 
   useOnMountUnsafe(() => {
     if (appModel?.state.aiMode){
-      play(gameModel,0.5);
+      play(gameModel,1);
     }
   });
 
