@@ -124,12 +124,12 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds}:GameParams)
     highlight winning cards !! -- DONE
   */
 
-    /*
-      ISSUE, announces player has won before finishing turning card animation --SOLVED
-      By making sure 2 openCards are never active at the same time, i.e in a pure synchronous fashion !!!
-      Ensures good functionning.
-      Perspectives: enable user to manipulate several cards simultaneously(opening or closing one when another one's animation is still running) + keep correctness
-    */
+  /*
+    ISSUE, announces player has won before finishing turning card animation --SOLVED
+    By making sure 2 openCards are never active at the same time, i.e in a pure synchronous fashion !!!
+    Ensures good functionning.
+    Perspectives: enable user to manipulate several cards simultaneously(opening or closing one when another one's animation is still running) + keep correctness
+  */
 
   return (
     <GameModelContext.Provider value={gameModel}>
@@ -146,7 +146,7 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds}:GameParams)
             const blueprintIndex = blueprint.cards.indexOf(card.blueprint);
             const background = card.visible ? cardCSSBackgrounds[blueprintIndex] : hiddenCardCSSBackground;
             const blueprintWon = gameModel.isWinningCard(card.blueprint);
-            const allCardsDisabledP = allCardsDisabled || blueprintWon;
+            const allCardsDisabledP = allCardsDisabled || blueprintWon || appModel?.state.aiMode;
 
             return (
                 <Card 

@@ -66,7 +66,7 @@ export async function play(model: MemoryGame,memoryFaculty: number = 0.5){
                     console.log('Actually memorized');
                 }
             }
-            continue ;   
+            continue ;
         }
 
         /// No cards is opened

@@ -18,6 +18,10 @@ const blueprint:MemoryGameBlueprint =  {cards: [
     {count:3,consecutiveErrorsAllowed:0,penalizeType: 'current'},
     {count:3,consecutiveErrorsAllowed:0,penalizeType: 'current'},
     {count:3,consecutiveErrorsAllowed:0,penalizeType: 'current'},
+    
+    {count:2,consecutiveErrorsAllowed:0,penalizeType: 'current'},
+    {count:2,consecutiveErrorsAllowed:0,penalizeType: 'current'},
+    {count:3,consecutiveErrorsAllowed:0,penalizeType: 'current'},
 ],penalizeOnNullCards: true};
 
 
@@ -26,6 +30,8 @@ const colors = [
   'green',
   'blue',
   'violet',
+  'brown',
+  'orange'
 ]
 
 interface AppModel{
