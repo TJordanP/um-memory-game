@@ -4,8 +4,9 @@ import GameModelContext from "../context/GameModelContext";
 interface BoardParams{
   style?: React.CSSProperties;
   children: JSX.Element[];
+  ref?: React.Ref<HTMLDivElement>;
 };
-function Board({children,style}:BoardParams){
+function Board({children,style,ref}:BoardParams){
   const gameModel = useContext(GameModelContext);
   const size = gameModel.getGridOrder();
   const defaultStyle:React.CSSProperties = {
@@ -15,7 +16,7 @@ function Board({children,style}:BoardParams){
     gap: '0px',
 };
   return (
-    <div style={{...defaultStyle,...style}}>
+    <div style={{...defaultStyle,...style}} ref={ref}>
       {children}
     </div>
   );

@@ -80,10 +80,30 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds}:GameParams)
         }).finished;
     };
 
+  const playShakeAnimation = async (target: HTMLElement) => {
+    const magnitude = 5;
+      await target.animate([
+          { transform: `translateX(${magnitude}px)` }, 
+          { transform: `translateX(-${magnitude}px)` },
+          { transform: `translateX(${magnitude}px)` }, 
+          { transform: `translateX(-${magnitude}px)` },
+          { transform: `translateX(${magnitude}px)` }, 
+          { transform: `translateX(-${magnitude}px)` },
+      ], {
+          duration: 300,      // Duration of the animation in milliseconds
+          easing: 'ease-in-out' // Easing function for smooth animation
+      }).finished;
+  }
+
+  const boardElementRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     gameModel.setEventListeners({
         openCard: playCardAnimation,
         closeCard: playCardAnimation,
+        penalized: async _ =>{
+          await playShakeAnimation(boardElementRef.current as HTMLElement);
+        } 
         //shake board on penalize ?!
     });
   },[gameModel]);
@@ -140,7 +160,7 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds}:GameParams)
         <Odometer value={actionsCount} format="ddd" />
       </div>
 
-      <Board style={boardStyles}>
+      <Board style={boardStyles} ref={boardElementRef}>
         {
           gameModel.getCards().map((card,i) => {
             const blueprintIndex = blueprint.cards.indexOf(card.blueprint);
@@ -156,18 +176,7 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds}:GameParams)
                     className={['game-card',blueprintWon ? 'game-card-win': ''].join(' ')}
                     onClick={ allCardsDisabledP
                       ? async e => {
-                        const magnitude = 5;
-                        await (e.target as HTMLButtonElement).animate([
-                            { transform: `translateX(${magnitude}px)` }, 
-                            { transform: `translateX(-${magnitude}px)` },
-                            { transform: `translateX(${magnitude}px)` }, 
-                            { transform: `translateX(-${magnitude}px)` },
-                            { transform: `translateX(${magnitude}px)` }, 
-                            { transform: `translateX(-${magnitude}px)` },
-                        ], {
-                            duration: 300,      // Duration of the animation in milliseconds
-                            easing: 'ease-in-out' // Easing function for smooth animation
-                        }).finished;
+                        await playShakeAnimation((e.target as HTMLButtonElement));
                       }
                       : async _ => {
                         setAllCardsDisabled(true);
