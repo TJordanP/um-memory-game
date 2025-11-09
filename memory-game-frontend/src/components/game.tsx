@@ -25,6 +25,7 @@ import winSoundEffect2 from '../assets/sound-effects/win-sound2.wav';
 import refuseSoundEffect from '../assets/sound-effects/refuse.wav';
 import turnOffSoundEffect from '../assets/sound-effects/turn-off.wav';
 import turnOnSoundEffect from '../assets/sound-effects/turn-on.wav';
+import newWinCardSoundEffect from '../assets/sound-effects/new-card-win.wav';
 
 
 interface GameParams{
@@ -119,6 +120,7 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,signal}:Game
   const { play: playRefuseSoundEffect } = useAudioPlayer(refuseSoundEffect,{});
   const { play: playTurnOffSoundEffect, player: turnOffSoundEffectPlayer } = useAudioPlayer(turnOffSoundEffect,{});
   const { play: playTurnOnSoundEffect,player: turnOnSoundEffectPlayer } = useAudioPlayer(turnOnSoundEffect,{});
+  const { play: playNewWinCardSoundEffect } = useAudioPlayer(newWinCardSoundEffect,{});
 
 
   useEffect(() => {
@@ -159,6 +161,9 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,signal}:Game
           playWinSoundEffect();
           await delay(1.500*1000);
           playWinSoundEffect2();
+        },
+        newWinCard: async () => {
+          playNewWinCardSoundEffect();
         }
     });
   },[gameModel]);

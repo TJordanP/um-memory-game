@@ -76,6 +76,7 @@ interface MemoryGameEvents{
     beforeOpenCard?: () => Promise<void> | null;
     afterOpenCard?: () => Promise<void> | null;
     hasWon?: () => Promise<void> | null;
+    newWinCard?: () => Promise<void> | null;
 }
 
 class MemoryGame{
@@ -250,6 +251,9 @@ class MemoryGame{
             else{
                 await this.events.closeCard?.(x,y);
             }
+
+            if (this.isWinningCard(card.blueprint))     await this.events.newWinCard?.();
+
             return this;
         }
 
