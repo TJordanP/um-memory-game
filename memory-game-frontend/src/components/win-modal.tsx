@@ -40,7 +40,7 @@ function WinModal({state:{show,handleClose},actionsCount:ac,level=''}:WinModalPa
     },[show]);
 
     return (
-        <Modal size='sm' backdrop='static' show={show} onHide={handleClose} centered style={{userSelect: 'none'}}>
+        <Modal size='lg' backdrop='static' show={show} onHide={handleClose} centered style={{userSelect: 'none'}}>
             <Modal.Header>
                 <Modal.Title className='cool-shake'>Well done !!</Modal.Title>
             </Modal.Header>
