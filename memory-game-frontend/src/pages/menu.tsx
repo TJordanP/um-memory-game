@@ -33,7 +33,7 @@ import { useModalState, useOnMountUnsafe } from "../utils";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import OptionsModal from "../components/options-modal";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import AppModelContext from "../context/AppModelContext";
 
 import menuMusic from '../assets/music/menu-music.ogg';
@@ -86,12 +86,13 @@ function Menu(){
 
     const appModel = useContext(AppModelContext);
 
-    const { play, stop } = useAudioPlayer(menuMusic,{autoplay: true,loop:true,initialVolume: 0.75});
+    const { play, stop,setVolume } = useAudioPlayer(menuMusic,{autoplay: true,loop:true,initialVolume: appModel?.state.audioEnabled ? 0.75 : 0,});
 
-    useOnMountUnsafe(() => {
+    useEffect(() => {
+        setVolume(appModel?.state.audioEnabled ? 0.75 : 0);
         play();
-        return stop;
-    });
+        //return stop;
+    },[appModel?.state.audioEnabled]);
 
     return (
         <div style={{position: 'relative',top: 0,left: 0,width: '100%',height: '100%',overflow: 'hidden'}}>

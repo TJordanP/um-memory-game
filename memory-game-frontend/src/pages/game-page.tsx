@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import Game from '../components/game';
 import './game-animated-background.css';
 
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 
 import music from '../assets/music/music.ogg';
 import { useOnMountUnsafe } from '../utils';
 import { useAudioPlayer } from 'react-use-audio-player';
+import AppModelContext from '../context/AppModelContext';
 
 function AnimatedBackground({style}:{style?:React.CSSProperties}){
     return (
@@ -25,8 +26,9 @@ function GamePage({...gameProps}:Parameters<typeof Game>[0]){
     };
     const controller = useMemo(() => new AbortController(),[]);
     const navigate = useNavigate();
+    const appModel = useContext(AppModelContext);
 
-    const { play, stop } = useAudioPlayer(music,{autoplay:true,loop:true,initialVolume: 0.75,initialRate: 1});
+    const { play, stop } = useAudioPlayer(music,{autoplay:true,loop:true,initialVolume: appModel?.state.audioEnabled ? 0.75 : 0,initialRate: 1});
 
     useOnMountUnsafe(() => {
         play();

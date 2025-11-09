@@ -110,17 +110,26 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,signal}:Game
 
   const boardElementRef = useRef<HTMLDivElement>(null);
 
+  const appModel = useContext(AppModelContext);
+
+  useOnMountUnsafe(() => {
+    if (appModel?.state.aiMode){
+      play(gameModel,appModel.state.aiLevel,signal);
+    }
+  });
 
   
   const winModalState = useModalState(false);
 
-  const { play: playPenalizeSoundEffect } = useAudioPlayer(penalizeSoundEffect,{});
-  const { play: playWinSoundEffect } = useAudioPlayer(winSoundEffect,{});
-  const { play: playWinSoundEffect2 } = useAudioPlayer(winSoundEffect2,{});
-  const { play: playRefuseSoundEffect } = useAudioPlayer(refuseSoundEffect,{});
-  const { play: playTurnOffSoundEffect, player: turnOffSoundEffectPlayer } = useAudioPlayer(turnOffSoundEffect,{});
-  const { play: playTurnOnSoundEffect,player: turnOnSoundEffectPlayer } = useAudioPlayer(turnOnSoundEffect,{});
-  const { play: playNewWinCardSoundEffect } = useAudioPlayer(newWinCardSoundEffect,{});
+  const volumeProps = {initialVolume: appModel?.state.audioEnabled ? 0.75 : 0};
+
+  const { play: playPenalizeSoundEffect } = useAudioPlayer(penalizeSoundEffect,volumeProps);
+  const { play: playWinSoundEffect } = useAudioPlayer(winSoundEffect,volumeProps);
+  const { play: playWinSoundEffect2 } = useAudioPlayer(winSoundEffect2,volumeProps);
+  const { play: playRefuseSoundEffect } = useAudioPlayer(refuseSoundEffect,volumeProps);
+  const { play: playTurnOffSoundEffect, player: turnOffSoundEffectPlayer } = useAudioPlayer(turnOffSoundEffect,volumeProps);
+  const { play: playTurnOnSoundEffect,player: turnOnSoundEffectPlayer } = useAudioPlayer(turnOnSoundEffect,volumeProps);
+  const { play: playNewWinCardSoundEffect } = useAudioPlayer(newWinCardSoundEffect,volumeProps);
 
 
   useEffect(() => {
@@ -168,14 +177,6 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,signal}:Game
     });
   },[gameModel]);
 
-
-  const appModel = useContext(AppModelContext);
-
-  useOnMountUnsafe(() => {
-    if (appModel?.state.aiMode){
-      play(gameModel,appModel.state.aiLevel,signal);
-    }
-  });
 
   const boardStyles:React.CSSProperties = {
     width: '400px',
