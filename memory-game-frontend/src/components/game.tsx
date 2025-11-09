@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { MemoryGame, type MemoryGameBlueprint } from '../models/MemoryGame';
 
 import GameModelContext from '../context/GameModelContext';
@@ -117,20 +117,23 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,signal}:Game
   const { play: playWinSoundEffect } = useAudioPlayer(winSoundEffect,{});
   const { play: playWinSoundEffect2 } = useAudioPlayer(winSoundEffect2,{});
   const { play: playRefuseSoundEffect } = useAudioPlayer(refuseSoundEffect,{});
-  const { play: playTurnOffSoundEffect } = useAudioPlayer(turnOffSoundEffect,{});
-  const { play: playTurnOnSoundEffect } = useAudioPlayer(turnOnSoundEffect,{});
-  
+  const { play: playTurnOffSoundEffect, player: turnOffSoundEffectPlayer } = useAudioPlayer(turnOffSoundEffect,{});
+  const { play: playTurnOnSoundEffect,player: turnOnSoundEffectPlayer } = useAudioPlayer(turnOnSoundEffect,{});
 
 
   useEffect(() => {
     gameModel.setEventListeners({
         openCard:  async (x,y) => {
-          playTurnOnSoundEffect();
-          await playCardAnimation(x,y);
+          //playTurnOnSoundEffect();    //Trigerring disturbing re-render
+          turnOnSoundEffectPlayer?.load();
+          turnOnSoundEffectPlayer?.play();
+          return playCardAnimation(x,y);
         },
         closeCard: async (x,y) => {
-          playTurnOffSoundEffect();
-          await playCardAnimation(x,y);
+          //playTurnOffSoundEffect();    //Trigerring disturbing re-render
+          turnOffSoundEffectPlayer?.load();
+          turnOffSoundEffectPlayer?.play();
+          return playCardAnimation(x,y);
         },
         penalized: async _ =>{
           playPenalizeSoundEffect();
