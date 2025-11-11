@@ -10,6 +10,8 @@ import { useOnMountUnsafe } from '../utils';
 import { useAudioPlayer } from 'react-use-audio-player';
 import AppModelContext from '../context/AppModelContext';
 
+import './game-page.css';
+
 function AnimatedBackground({style}:{style?:React.CSSProperties}){
     return (
         <div className='game-background' style={{...style}}/>
@@ -40,9 +42,11 @@ function GamePage({...gameProps}:Parameters<typeof Game>[0]){
     return (
         <div style={{position: 'relative',top: 0,left: 0, width: '100%',height: '100%',overflow:'hidden'}}>
             <AnimatedBackground style={{...stackStyles,...(win ? {animation: 'p infinite 0.1s linear'} : {})}}/>
-            <div style={{display: 'flex',flexDirection: 'column',justifyContent: 'center',alignItems: 'center', ...stackStyles}}>
-                <Game signal={controller.signal} {...gameProps} setGameMusicRate={setRate} hasWon={async ()=>setWin(true)} />
-                <button style={{width: '80%',marginTop: '5rem'}} onClick={e => {
+            <div style={{display: 'flex',flexDirection: 'column',justifyContent: 'space-evenly',alignItems: 'center', ...stackStyles}}>
+                <div>
+                    <Game signal={controller.signal} {...gameProps} setGameMusicRate={setRate} hasWon={async ()=>setWin(true)} />
+                </div>
+                <button className='back-button' style={{width: '80%',maxWidth: '700px',marginTop: '5rem'}} onClick={e => {
                     if (!confirm('Do you really want to quit the party ?\nAll progress shall be lost !!')){
                         navigate('/game/');
                         return ;
@@ -50,7 +54,7 @@ function GamePage({...gameProps}:Parameters<typeof Game>[0]){
                     
                     controller.abort('reason');
                     navigate('/menu/');
-                }}>BACK</button>
+                }}><div style={{transform: 'rotateY(180deg)'}}>BACK</div></button>
             </div>
         </div>
     );
