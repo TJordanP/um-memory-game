@@ -42,12 +42,20 @@ const blueprint:MemoryGameBlueprint =  {cards: [
 
 const colors = [
   'red',
-  'green',
-  'blue',
+  'lightgreen',
+  'lightblue',
   'violet',
   'brown',
   'orange'
-]
+];
+
+const hiddenCardColor = `/*conic-gradient(
+        black 0deg, 
+        gray 90deg, 
+        white 180deg,
+        lightgray 270deg,
+        black 360deg
+    )*/black`;
 
 interface AppModel{
   audioEnabled: boolean;
@@ -84,7 +92,7 @@ function App() {
               <Route path='/' element={<Navigate to='/menu'/>}/>
               <Route path='/menu' element={<Menu />}/>
               <Route path='/game' element={
-                <GamePage cardCSSBackgrounds={colors} nullCardCSSBackground='' hiddenCardCSSBackground='black' blueprint={blueprint} />
+                <GamePage cardCSSBackgrounds={colors} nullCardCSSBackground='' hiddenCardCSSBackground={hiddenCardColor} blueprint={blueprint} />
               }/>
             </Routes>
           </BrowserRouter>
