@@ -6,7 +6,8 @@ export default defineConfig({
   plugins: [react()],
   css: {
     lightningcss:{
-      errorRecovery: true
+      errorRecovery: true,
+      
     }
   }
 })

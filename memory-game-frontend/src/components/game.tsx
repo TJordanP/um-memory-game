@@ -221,10 +221,10 @@ function Game({blueprint,hiddenCardCSSBackground,cardCSSBackgrounds,signal,setGa
   return (
     <GameModelContext.Provider value={gameModel}>
       
-      <div style={{textAlign: 'center',marginBottom: '1rem',userSelect: 'none',fontSize: '2rem'}}>
-        {actionsCount <= 9 && <Odometer value={0} format="ddd" />}
-        {actionsCount <= 99 && <Odometer value={0} format="ddd" />}
-        <Odometer value={actionsCount} format="ddd" />
+      <div style={{textAlign: 'center',marginBottom: '1rem',userSelect: 'none',fontSize: '2rem'/*,maxWidth: (45*3)+'px'*/}}>
+        {actionsCount <= 9 && <Odometer value={0} format="ddd" style={{width: 'fit-content',display: 'inline-block'}}/>}
+        {actionsCount <= 99 && <Odometer value={0} format="ddd" style={{width: 'fit-content',display: 'inline-block'}} />}
+        <Odometer value={actionsCount} format="ddd" style={{width: 'fit-content',display: 'inline-block'}} />
       </div>
 
       <Board style={boardStyles} ref={boardElementRef}>
