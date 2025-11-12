@@ -64,6 +64,8 @@ interface AppModel{
 };
 
 import { GemoPersistStorageDefault } from './components/win-modal';
+import { Modal } from 'react-bootstrap';
+import { useModalState } from './utils';
 
 
 
@@ -82,14 +84,16 @@ function App() {
     setStore(store => ({...store, aiLevel: state.aiLevel,audioEnabled: state.audioEnabled}));
   },[state]);
 
+  const triggerSoundModal = useModalState(false);
 
   useEffect(() => {
-    if (import.meta.env.DEV) {
+    /*if (import.meta.env.DEV) {
        remove();
        //Clear local storage, for reproducible tests
 
       //setValue({records: [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},]} as any);
-    }
+    }*/
+    if (state.audioEnabled)   triggerSoundModal.setShow(true);
   },[]);
 
   return (
@@ -106,6 +110,11 @@ function App() {
             </Routes>
           </BrowserRouter>
         </div>
+        <Modal show={triggerSoundModal.show} onHide={triggerSoundModal.handleClose} centered style={{userSelect: 'none'}}>
+            <Modal.Header closeButton>
+                <Modal.Title>User interaction is required to trigger sound on most browsers</Modal.Title>
+            </Modal.Header>
+        </Modal>
       </div>
     </AppModelContext.Provider>
     
