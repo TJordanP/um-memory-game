@@ -87,12 +87,12 @@ function App() {
   const triggerSoundModal = useModalState(false);
 
   useEffect(() => {
-    /*if (import.meta.env.DEV) {
+    if (import.meta.env.DEV) {
        remove();
        //Clear local storage, for reproducible tests
 
       //setValue({records: [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},]} as any);
-    }*/
+    }
     if (state.audioEnabled)   triggerSoundModal.setShow(true);
   },[]);
 
